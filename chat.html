@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<head>
+    <meta charset = 'UTF-8'>
+    <title>Title</title>
+    <script src="http://127.0.0.1:8124/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io.connect('http://127.0.0.1:8124');
+        socket.on('connect', function(){
+            socket.emit('addme',{name : prompt('請輸入名子')});
+        });
+
+        socket.on('chat', function(data){
+            var p = document.createElement('p');
+            p.innerHTML = data.sender + ':' + data.message;
+            document.getElementById('output').appendChild(p);
+        });
+        window.addEventListener('load', function(){
+            document.getElementById('sendtext').addEventListener('click', function(){
+                var text = document.getElementById('data').value;
+                var regex = /(<([^>]+)>)/ig
+                var result = text.replace(regex, "")
+                socket.emit('sendchat', {message : 'say '+ result});
+            }, false);
+        }, false);
+    </script>
+</head>
+<body>
+    <div id ='output'></div> <div id = 'send'>
+        <input type="text" id ="data" size = "100" /><br />
+        <input type="button" id = "sendtext" value="Send Text" /> </div>
+</body>
+</html>
+
+<!--<div style="width: 80%; height: auto;"><img src="http://i.imgur.com/tSzlaMV.jpg" style="max-width: 80%; height: auto;"> </div>-->
