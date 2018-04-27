@@ -42,8 +42,8 @@ io.sockets.on('connection', function (socket) {
                 const division = 6;
                 let multiplication = [];
                 let result = 0;
-                for (i = 1; i <= 9; i++) {
-                    for (j = 1; j <= 9; j++) {
+                for (let i = 1; i <= 9; i++) {
+                    for (let j = 1; j <= 9; j++) {
                         result = i * j;
                         if (result == division) {
                             multiplication.push("$");
@@ -68,22 +68,22 @@ io.sockets.on('connection', function (socket) {
                 socket.emit('chat', {message: string});
                 socket.x = data.message;
                 console.log(socket.token);
-                socket.emit("chat", {message: "輸入整除參數"});
+                socket.emit("chat", {sender: "",message: "輸入整除參數"});
             }
 
             else if (socket.x !== undefined && socket.y === undefined) {
                 let string = "整除數:" + data.message;
-                socket.emit('chat', {message: string});
+                socket.emit('chat', {sender: "",message: string});
                 socket.y = data.message;
                 console.log(socket.x, socket.y);
                 let array = [];
-                for (i = 1; i <= socket.x; i++) {
-                    for (j = 1; j <= socket.x; j++) {
-                        if (j % socket.y == 0){
+                for (let i = 1; i <= socket.x; i++) {
+                    for (let j = 1; j <= socket.x; j++) {
+                        if ((i*j) % socket.y == 0) {
                             array.push("@");
                         }
                         else{
-                            array.push(j);
+                            array.push(i*j);
                         }
                     }
                     socket.emit('chat', {sender: "", message: array});
@@ -96,7 +96,7 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('disconnect', function () {
-        var bye = {sender: "SERVER", message: socket.username + "離線了"};
+        let bye = {sender: "SERVER", message: socket.username + "離線了"};
         io.sockets.emit('chat', bye);
     });
 });
