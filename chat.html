@@ -6,7 +6,7 @@
     <script>
         var socket = io.connect('http://127.0.0.1:8124');
         socket.on('connect', function () {
-            socket.emit('addme', {name: prompt('請輸入名子')});
+            socket.emit('addme', {name:"Midterm"});
         });
 
         socket.on('chat', function (data) {
@@ -17,10 +17,7 @@
         window.addEventListener('load', function () {
             document.getElementById('sendtext').addEventListener('click', function () {
                 var text = document.getElementById('data').value;
-                if (text == '99') {
-                    socket.emit('sendchat', {message: text, ignore: prompt('what num do you wanna remove????')})
-                }
-                else socket.emit('sendchat', {message: text});
+                socket.emit('sendchat', {message: text});
             }, false);
         }, false);
     </script>
