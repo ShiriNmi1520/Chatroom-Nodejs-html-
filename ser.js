@@ -44,16 +44,16 @@ io.sockets.on('connection', function (socket) {
             }
 
             else if (data.message === "九九乘法表") {
-                const division = 6;
                 let multiplication = [];
-                let result = 0;
+                let result, modulus;
                 for (let i = 1; i <= 9; i++) {
                     for (let j = 1; j <= 9; j++) {
                         result = i * j;
-                        if (result == division) {
+                        modulus = result%6;
+                        if (modulus === 0) {
                             multiplication.push("$");
                         }
-                        else multiplication.push(result);
+                        else multiplication.push(i*j);
                     }
                     socket.emit("chat", {sender: "", message: multiplication});
                     multiplication = [];
