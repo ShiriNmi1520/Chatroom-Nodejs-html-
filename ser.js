@@ -30,6 +30,11 @@ io.sockets.on('connection', function (socket) {
                 socket.token = 123;
             }
 
+            else if (data.message === "猜數字"){
+                socket.emit("chat", {message: "請輸入數字"});
+                socket.token = 456;
+            }
+
             else if (data.message === 'Who are you?') {
                 socket.emit("chat", {
                     sender: "", message: "==========<br>班級:夜資工一<br>學號" +
@@ -59,7 +64,7 @@ io.sockets.on('connection', function (socket) {
             else {
                 socket.emit("chat", {sender: "", message: "功能表:<br>1.Who are you?<br>2.九九乘法表" + "<br>3.矩陣表<br>4.猜數字"});
             }
-            console.log("Send here:" + data);
+            console.log("Send here:" + JSON.stringify(data));
         }
 
         else if (socket.token === 123) {
@@ -91,6 +96,17 @@ io.sockets.on('connection', function (socket) {
                 }
                 socket.token = "";
                 socket.emit("chat", {sender: "", message: "功能表:<br>1.Who are you?<br>2.九九乘法表" + "<br>3.矩陣表<br>4.猜數字"});
+            }
+        }
+
+        else if (socket.token === 456){
+            console.log("Here");
+            console.log(socket.input);
+            let answer = 9453;
+            if (socket.input === undefined) {
+                let tell = "你輸入了:" + input;
+                socket.emit('chat', {sender: "", message: tell});
+                socket.input = data.message;
             }
         }
     });
