@@ -11,7 +11,7 @@
 
         socket.on('chat', function (data) {
             var p = document.createElement('p');
-            p.innerHTML = data.sender + ':' + data.message;
+            p.innerHTML = data.sender + data.message;
             document.getElementById('output').appendChild(p);
         });
         window.addEventListener('load', function () {

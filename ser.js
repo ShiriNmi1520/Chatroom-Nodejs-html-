@@ -26,12 +26,12 @@ io.sockets.on('connection', function (socket) {
         if (socket.token !== 456 && socket.token !== 123 || socket.token === undefined) {
 
             if (data.message === '矩陣表') {
-                socket.emit("chat", {message: "輸入矩陣N"});
+                socket.emit("chat", {sender: "", message: "輸入矩陣N"});
                 socket.token = 123;
             }
 
-            else if (data.message === "猜數字"){
-                socket.emit("chat", {message: "請輸入數字"});
+            else if (data.message === "猜數字") {
+                socket.emit("chat", {sender: "", message: "請輸入數字"});
                 socket.token = 456;
             }
 
@@ -70,25 +70,24 @@ io.sockets.on('connection', function (socket) {
         else if (socket.token === 123) {
             if (socket.x === undefined) {
                 let string = "N : " + data.message;
-                socket.emit('chat', {message: string});
+                socket.emit('chat', {sender: "", message: string});
                 socket.x = data.message;
-                console.log(socket.token);
-                socket.emit("chat", {sender: "",message: "輸入整除參數"});
+                socket.emit("chat", {sender: "", message: "輸入整除參數"});
             }
 
             else if (socket.x !== undefined && socket.y === undefined) {
                 let string = "整除數:" + data.message;
-                socket.emit('chat', {sender: "",message: string});
+                socket.emit('chat', {sender: "", message: string});
                 socket.y = data.message;
                 console.log(socket.x, socket.y);
                 let array = [];
                 for (let i = 1; i <= socket.x; i++) {
                     for (let j = 1; j <= socket.x; j++) {
-                        if ((i*j) % socket.y == 0) {
+                        if ((i * j) % socket.y == 0) {
                             array.push("@");
                         }
-                        else{
-                            array.push(i*j);
+                        else {
+                            array.push(i * j);
                         }
                     }
                     socket.emit('chat', {sender: "", message: array});
@@ -99,12 +98,38 @@ io.sockets.on('connection', function (socket) {
             }
         }
 
-        else if (socket.token === 456){
-            let answer = 9453;
-            if (socket.input === undefined) {
-                let tell = "你輸入了:" + data.message;
-                socket.input = data.message;
-                socket.emit('chat', {sender: "", message: tell});
+        else if (socket.token === 456) {
+            let answer_arr = "9453".split("");
+            let tell = "你輸入了:" + data.message;
+            let a = 0, b = 0;
+            socket.input = data.message;
+            let input_arr = socket.input.split("");
+            let duplicate_state = 0;
+            let hash = {};
+            socket.emit('chat', {sender: "", message: tell});
+
+            if (input_arr.length !== 4) {
+                socket.emit('chat', {sender: "", message: "你輸入的數字小於四位，請重新輸入!!"});
+            }
+
+            if (!(input_arr.length === new Set(input_arr).size)){
+                duplicate_state = 1;
+                socket.emit('chat', {sender:"", message: "輸入含有重複內容，請重新輸入!!"});
+            }
+
+            for (let i = 0; i < input_arr.length; i++) {
+                if (input_arr[i] == answer_arr[i]) ++a;
+                else if (answer_arr.includes(input_arr[i])) ++b;
+            }
+
+            if (duplicate_state === 0) {
+                socket.emit('chat', {sender: "", message: a + "A" + b + "B"});
+            }
+
+            if (a === 4) {
+                socket.emit('chat', {sender: "Correct!", message: "遊戲結束"});
+                socket.emit("chat", {sender: "", message: "功能表:<br>1.Who are you?<br>2.九九乘法表" + "<br>3.矩陣表<br>4.猜數字"});
+                socket.token = "";
             }
         }
     });
