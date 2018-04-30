@@ -23,7 +23,7 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('sendchat', function (data) {
-        if (socket.token !== 123 || socket.token === undefined) {
+        if (socket.token !== 456 && socket.token !== 123 || socket.token === undefined) {
 
             if (data.message === '矩陣表') {
                 socket.emit("chat", {message: "輸入矩陣N"});
@@ -100,13 +100,11 @@ io.sockets.on('connection', function (socket) {
         }
 
         else if (socket.token === 456){
-            console.log("Here");
-            console.log(socket.input);
             let answer = 9453;
             if (socket.input === undefined) {
-                let tell = "你輸入了:" + input;
-                socket.emit('chat', {sender: "", message: tell});
+                let tell = "你輸入了:" + data.message;
                 socket.input = data.message;
+                socket.emit('chat', {sender: "", message: tell});
             }
         }
     });
