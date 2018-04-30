@@ -1,7 +1,7 @@
 /vendor
 /node_modules
 /.vs
-package-locak.json
+package-lock.json
 Homestead.yaml
 Homestead.json
 .env
