@@ -105,16 +105,15 @@ io.sockets.on('connection', function (socket) {
             socket.input = data.message;
             let input_arr = socket.input.split("");
             let duplicate_state = 0;
-            let hash = {};
             socket.emit('chat', {sender: "", message: tell});
 
             if (input_arr.length !== 4) {
                 socket.emit('chat', {sender: "", message: "你輸入的數字小於四位，請重新輸入!!"});
             }
 
-            if (!(input_arr.length === new Set(input_arr).size)){
+            else if (!(input_arr.length === new Set(input_arr).size)) {
                 duplicate_state = 1;
-                socket.emit('chat', {sender:"", message: "輸入含有重複內容，請重新輸入!!"});
+                socket.emit('chat', {sender: "", message: "輸入含有重複內容，請重新輸入!!"});
             }
 
             for (let i = 0; i < input_arr.length; i++) {
